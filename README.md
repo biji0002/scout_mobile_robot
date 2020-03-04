@@ -1,43 +1,46 @@
-# ROS Packages for Scout Mobile Base
+# SDK for AgileX Scout Mobile Base
 
-## Packages
+Copyright (c) 2019 [WestonRobot](https://www.westonrobot.com/)
 
-* scout_bringup: launch and configuration files to start ROS nodes 
-* scout_base: a ROS wrapper around Scout SDK to monitor and control the robot
-* scout_sdk: Scout SDK customized for ROS
-* scout_msgs: scout related message definitions
-* (scout_ros: meta package for the Scout robot ROS packages)
+## Introduction
 
-## Communication interface setup
+This software packages provides a C++ interface to communicate with the Scout mobile base, for sending commands to the robot and acquiring the latest robot state. The SDK works on both x86 and ARM platforms.
 
-### Setup CAN-To-USB adapter 
+Generally, you only need to instantiate an object of "class ScoutBase", then use the object to programmatically control the robot. Internally, class ScoutBase manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the ScoutState data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. 
+
+Refer to "src/apps/scout_demo" for an example.
+
+## Package Structure
+
+* apps: demo to illustrate how to use the SDK, scout_monitor is a TUI application to monitor states of Scout
+* comm/async_io: manages raw data communication with robot
+* comm/scout_protocol: encoding and decoding of Scout UART/CAN protocols
+* scout_base: interface to send command to robot and receive robot state
+* third_party
+    - asio: asynchronous IO management (serial and CAN)
+    - googletest: for unit tests only (not required otherwise)
+
+## Setup CAN-To-USB adapter 
  
+The instructions work for stm32f0-based adapter with [candleLight](https://github.com/HubertD/candleLight_fw) firmware on a host computer running Linux. (Refer to limitations listed at the bottom for more details.)
+
 1. Enable gs_usb kernel module
-   
     ```
     $ sudo modprobe gs_usb
     ```
-
 2. Bringup can device
-   
    ```
    $ sudo ip link set can0 up type can bitrate 500000
    ```
-
 3. If no error occured during the previous steps, you should be able to see the can device now by using command
-   
    ```
    $ ifconfig -a
    ```
-
 4. Install and use can-utils to test the hardware
-   
     ```
     $ sudo apt install can-utils
     ```
-
 5. Testing command
-   
     ```
     # receiving data from can0
     $ candump can0
@@ -45,93 +48,52 @@
     $ cansend can0 001#1122334455667788
     ```
 
-Two scripts inside the "scout_bringup/scripts" folder are provided for easy setup. You can run "./setup_can2usb.bash" for the first-time setup and run "./bringup_can2usb.bash" to bring up the device each time you unplug and re-plug the adapter.
+Two scripts inside the "./scripts" folder are provided for easy setup. You can run "./setup_can2usb.bash" for the first-time setup and run "./bringup_can2usb.bash" to bring up the device each time you unplug and re-plug the adapter.
 
-### Setup UART
+## Build SDK
 
-Generally your UART2USB cable should be automatically recognized as "/dev/ttyUSB0" or something similar and ready for use. If you get the error "... permission denied ..." when trying to open the port, you need to grant access of the port to your user accout:
+Install compile tools
 
 ```
-$ sudo usermod -a -G dialout <username>
+$ sudo apt install build-essential cmake
 ```
 
-Replace "<username>" in the above command with your Linux username. You need to re-login to get the change to take effect.
+If you want to build the TUI monitor tool, install libncurses
 
-## Basic usage of the ROS package
+```
+$ sudo apt install libncurses5-dev
+```
 
-1. Install dependent library and ROS packages
+Configure and build
 
-    ```
-    $ sudo apt install libpcap-dev
-    ```
+```
+$ cd scout_sdk 
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+```
 
-    ```
-    $ sudo apt install ros-melodic-teleop-twist-keyboard
-    $ sudo apt install ros-melodic-navigation
-    $ sudo apt install ros-melodic-pointcloud-to-laserscan
-    $ sudo apt install ros-melodic-video-stream-opencv
-    ```
+## Known Limitations
 
-    Change ros-melodic-* in the command to ros-kinetic-* if you're using ROS Kinetic.
-
-2. Clone the packages into your catkin workspace and compile
-
-    (the following instructions assume your catkin workspace is at: ~/catkin_ws/src)
+1. The CAN interface requires the hardware to appear as a CAN device in the system. You can use the command "ifconfig" to check the interface status. For example, you may see something like
 
     ```
-    $ cd ~/catkin_ws/src
-    $ git clone https://github.com/westonrobot/scout_ros.git
-    $ git clone https://github.com/cyberbotics/webots_ros.git
-    $ git clone https://github.com/RoboSense-LiDAR/ros_rslidar.git
-    $ cd ..
-    $ catkin_make
-    ```
-
-3. Launch ROS nodes
- 
-* Start the base node 
-
-    ```
-    $ roslaunch scout_bringup scout_minimal.launch
-    ```
-
-    or (if you're using a serial port)
-        
-    ```
-    $ roslaunch scout_bringup scout_minimal_uart.launch
-    ```
-
-* Start the keyboard tele-op node
-
-    ```
-    $ roslaunch scout_bringup scout_teleop_keyboard.launch
-    ```
-
-    **SAFETY PRECAUSION**: 
-
-    The default command values of the keyboard teleop node are high, make sure you decrease the speed commands before starting to control the robot with your keyboard! Have your remote controller ready to take over the control whenever necessary. 
-
-* Navigation with the robot
-
-    Connect to the robot base and start onboard sensors
-
-    ```
-    $ roslaunch scout_bringup scout_nav_base.launch
+    can1: flags=193<UP,RUNNING,NOARP>  mtu 16
+            unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
+            RX packets 4751634  bytes 38013072 (36.2 MiB)
+            RX errors 0  dropped 0  overruns 0  frame 0
+            TX packets 126269  bytes 1010152 (986.4 KiB)
+            TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+            device interrupt 43
     ```
     
-    Or if you're using the simulator
+    If you use your own CAN-to-USB adapter, make sure it supports slcan or can be brought up as a native CAN device (for example, CANable https://www.canable.io/). Some adapters may use a custom-defined protocol and appear as a serial device in Linux. In such a case, you will have to translate the byte stream between CAN and UART by yourself. It would be difficult for us to provide support for them since not all manufacturers define this protocol in the same way.
 
-    ```
-    $ roslaunch scout_bringup scout_sim_nav_base.launch
-    ```
+<!-- 
+2. Release v0.1 of this SDK provided a serial interface to talk with the robot. Front/rear light on the robot cannot be controlled and only a small subset of all robot states can be acquired through that interface. Full support of the serial interface is still under development and requires additional work on both the SDK and firmware sides.
+-->
 
-    Then run the mapping or navigation launch file
+## Reference
 
-    ```
-    $ roslaunch scout_navigation scout_mapping_demo.launch
-    ```
-
-    ```
-    $ roslaunch scout_navigation scout_navigation_demo.launch
-    ```
-
+* [CAN command reference in Linux](https://wiki.rdu.im/_pages/Notes/Embedded-System/Linux/can-bus-in-linux.html)
