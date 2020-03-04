@@ -1,0 +1,21 @@
+int32 CMD_ZOOM_IN = 0
+int32 CMD_ZOOM_OUT = 1
+int32 CMD_FOCUS_NEAR = 2
+int32 CMD_FOCUS_FAR = 3
+int32 CMD_SHUTTER_EXPAND = 4
+int32 CMD_SHUTTER_SHRINK = 5
+
+int32 CMD_MOVE_UP = 6
+int32 CMD_MOVE_DOWN = 7
+int32 CMD_MOVE_LEFT = 8
+int32 CMD_MOVE_RIGHT = 9
+int32 CMD_MOVE_UP_LEFT = 10
+int32 CMD_MOVE_UP_RIGHT = 11
+int32 CMD_MOVE_DOWN_LEFT = 12
+int32 CMD_MOVE_DOWN_RIGHT = 13
+
+int32 ptz_cmd
+int32 param1
+int32 param2
+---
+bool ptz_cmd_received
