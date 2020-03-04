@@ -1,0 +1,5 @@
+<launch>
+
+    <node name="scout_ultrasonic" pkg="scout_ultrasonic" type="scout_ultrasonic" output="screen"/>
+    
+</launch>
