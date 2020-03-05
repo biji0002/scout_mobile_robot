@@ -1,9 +1,18 @@
-#include "ros/ros.h"
 #include "scout_msgs/PTZ.h"
+#include "ros/ros.h"
 #include <cstdlib>
 #include <sstream>
 #include <stdio.h>
+#include <ncurses.h>
 
+
+void counter_clockwise(ros::Publisher pb,scout_msgs::PTZ call1,scout_msgs::PTZ call4);
+
+void clockwise(ros::Publisher pb,scout_msgs::PTZ call0,scout_msgs::PTZ call4);
+
+void going_up(ros::Publisher pb,scout_msgs::PTZ call2,scout_msgs::PTZ call4);
+
+void going_down(ros::Publisher pb,scout_msgs::PTZ call3,scout_msgs::PTZ call4);
 
 
 
@@ -34,93 +43,154 @@ int main(int argc, char **argv)
 	msg3.param1 = 0;
 	msg3.param2 = 2;
 
+	scout_msgs::PTZ msg4;//stop
+	msg4.ptz_cmd = 0;
+	msg4.param1 = 0;
+	msg4.param2 = 0;
 
-	ros::Rate loop_rate(10);
-	int cnt = 0;
 
+	//ros::Rate loop_rate(10);
+	//int cnt = 0;
+	ROS_INFO("publisher ready");
 	while(ros::ok())
 	{
-		while (cnt<100)
+		ROS_INFO("ROS OK, waiting for command..");
+		/*
+		turning_right(pub,msg0,msg1,msg2,msg3,msg4);
+		turning_left(pub,msg0,msg1,msg2,msg3,msg4);*/
+
+		char i = getchar();
+		switch(i)
 		{
+			case 'd':ROS_INFO("counter_clockwise");counter_clockwise(pub,msg1,msg4);break;
+			case 'a':ROS_INFO("clockwise");clockwise(pub,msg0,msg4);break;
+			case 'w':ROS_INFO("going_up");going_up(pub,msg2,msg4);break;
+			case 's':ROS_INFO("going_down");going_down(pub,msg3,msg4);break;
 
-			pub.publish(msg1);
-			ROS_INFO("counter clockwise");
-			cnt++;
-			ros::spinOnce();
-			loop_rate.sleep();
 		}
-
-		//pub.publish(msg4);
-		//pub.publish(msg4);
-		//ROS_INFO("stop");
-		while (cnt>=100 && cnt<180)
-		{
-
-			pub.publish(msg2);
-			ROS_INFO("up");
-			cnt++;
-			ros::spinOnce();
-			loop_rate.sleep();
-		}
-
-		while (cnt>=180 && cnt<280)
-		{
-
-			pub.publish(msg0);
-			ROS_INFO("up");
-			cnt++;
-			ros::spinOnce();
-			loop_rate.sleep();
-		}
-		while (cnt>=280 && cnt<360)
-		{
-
-			pub.publish(msg3);
-			ROS_INFO("down");
-			cnt++;
-			ros::spinOnce();
-			loop_rate.sleep();
-		}
-		
-		if (cnt==120)
-			cnt = 0;
-
 	}
 
 	
 	
-
+	ros::spinOnce();
 	
     return 0;
 }
 
+void counter_clockwise(ros::Publisher pb,scout_msgs::PTZ call1,scout_msgs::PTZ call4)
+{
+
+	int cnt = 0;
+	ros::Rate loop_rate(10);
+	ROS_INFO("counter clockwise");
+	while (cnt<100)
+	{
+		pb.publish(call1);		
+		cnt++;
+		loop_rate.sleep();
+	}
+
+	ROS_INFO("stay at right");
+	while (cnt>=100 && cnt <110)
+	{
+	    pb.publish(call4);
+		cnt++;		
+	}
+
+}
+
+void clockwise(ros::Publisher pb,scout_msgs::PTZ call0,scout_msgs::PTZ call4)
+{
+
+	int cnt = 0;
+	ros::Rate loop_rate(10);
+	ROS_INFO("clockwise");
+	while (cnt<100)
+	{
+		pb.publish(call0);		
+		cnt++;
+		loop_rate.sleep();
+	}
+
+	ROS_INFO("stay at left");
+	while (cnt>=100 && cnt <110)
+	{
+	    pb.publish(call4);
+		cnt++;		
+	}
+
+}
+
+void going_up(ros::Publisher pb,scout_msgs::PTZ call2,scout_msgs::PTZ call4)
+{
+
+	int cnt = 0;
+	ros::Rate loop_rate(10);
+	ROS_INFO("up");
+	while (cnt<80)
+	{
+		pb.publish(call2);		
+		cnt++;
+		loop_rate.sleep();
+	}
+
+	ROS_INFO("stay up");
+	while (cnt>=80 && cnt <90)
+	{
+	    pb.publish(call4);
+		cnt++;		
+	}
+
+}
+
+void going_down(ros::Publisher pb,scout_msgs::PTZ call3,scout_msgs::PTZ call4)
+{
+
+	int cnt = 0;
+	ros::Rate loop_rate(10);
+	ROS_INFO("down");
+	while (cnt<74)
+	{
+		pb.publish(call3);		
+		cnt++;
+		loop_rate.sleep();
+	}
+
+	ROS_INFO("stay down");
+	while (cnt>=74 && cnt <84)
+	{
+	    pb.publish(call4);
+		cnt++;		
+	}
+
+}
 /*
-			pub.publish(msg3);
-			pub.publish(msg3);
-			pub.publish(msg3);
-			pub.publish(msg3);
-			ROS_INFO("up");
-			ros::Duration(3).sleep();
+void turning_right(ros::Publisher pb,scout_msgs::PTZ call0,scout_msgs::PTZ call1,scout_msgs::PTZ call2,scout_msgs::PTZ call3,scout_msgs::PTZ call4)
+{
 
-			//ROS_INFO("stop clockwise");
+	int cnt = 0;
+	ros::Rate loop_rate(10);
+	ROS_INFO("counter clockwise");
+	while (cnt<100)
+	{
+		pb.publish(call1);		
+		cnt++;
+		loop_rate.sleep();
+	}
+	ROS_INFO("up");
+	while (cnt>=100 && cnt<180)
+	{
+		pb.publish(call2);		
+		cnt++;
+		loop_rate.sleep();
+	}
 
-			pub.publish(msg2);
-			pub.publish(msg2);
-			pub.publish(msg2);
-			pub.publish(msg2);
-			ROS_INFO("down");		
-			ros::Duration(3).sleep();
+	ROS_INFO("stay at right");
+	while (cnt>=180 && cnt <190)
+	{
+	    pb.publish(call4);
+		cnt++;		
+	}
 
-			pub.publish(msg0);
-			pub.publish(msg0);
-			pub.publish(msg0);
-			pub.publish(msg0);
-			ROS_INFO("clockwise");		
-			ros::Duration(3).sleep();
-
-			pub.publish(msg1);
-			pub.publish(msg1);
-			pub.publish(msg1);
-			pub.publish(msg1);
-			ROS_INFO("counter clockwise");
+}
 */

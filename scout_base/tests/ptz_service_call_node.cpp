@@ -27,9 +27,6 @@ ptz::ptz()
 void ptz::messangeCallback(const scout_msgs::PTZ::ConstPtr& msg)
 {
     scout_msgs::JideTechPTZ srv;
-    //srv.request.ptz_cmd = atoll(argv[1]);
-    //srv.request.param1 = atoll(argv[2]);
-    //srv.request.param2 = atoll(argv[3]);
     srv.request.ptz_cmd = msg->ptz_cmd;
     srv.request.param1 = msg->param1;
     srv.request.param2 = msg->param2;
@@ -47,7 +44,7 @@ void ptz::messangeCallback(const scout_msgs::PTZ::ConstPtr& msg)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "ptz_service_call_node");
-
+	ROS_INFO("PTZ_service_node start!")
     ptz ptz_ctrl;
 
 	ros::spin();
