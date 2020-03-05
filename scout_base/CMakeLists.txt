@@ -67,10 +67,6 @@ target_link_libraries(sensorhub_node ${catkin_LIBRARIES} ${LCM_LIBRARIES})
 add_executable(scout_csi_camera src/scout_csi_camera.cpp)
 target_link_libraries(scout_csi_camera ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
-#add_executable(test_ptz_ctrl tests/test_ptz_ctrl.cpp)
-#target_link_libraries(test_ptz_ctrl ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
-
-
 add_executable(ptz_ctrl_publisher tests/ptz_ctrl_publisher.cpp)
 target_link_libraries(ptz_ctrl_publisher ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
@@ -80,8 +76,7 @@ target_link_libraries(ptz_cam_srv_client ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${
 add_executable(ptz_service_call_node tests/ptz_service_call_node.cpp)
 target_link_libraries(ptz_service_call_node ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
-#add_executable(pose_ptz_cam src/pose_ptz_cam.cpp)
-#target_link_libraries(pose_ptz_cam ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
+
 
 
 #############
