@@ -12,7 +12,12 @@ topics:
   timeout : 0.5
   priority: 120
 -
-  name    : ultrasonic
-  topic   : ultrasonic_vel
+  name    : ultrasonic_front_back
+  topic   : brake_vel
   timeout : 0.5
   priority: 150
+-
+  name    : ultrasonic_side
+  topic   : backward_vel
+  timeout : 0.5
+  priority: 140
