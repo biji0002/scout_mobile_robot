@@ -1,5 +1,8 @@
 <launch>
 
-    <node name="scout_ultrasonic" pkg="scout_ultrasonic" type="scout_ultrasonic" output="screen"/>
-    
+    <node name="ultrasonic_side" pkg="scout_ultrasonic" type="backward.py" />
+    <node name="ultrasonic_front_back" pkg="scout_ultrasonic" type="brake.py" />
+
+
+    <include file="$(find twist_mux)/launch/twist_mux.launch" />
 </launch>
