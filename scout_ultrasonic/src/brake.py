@@ -13,9 +13,18 @@ def callback0(data):
     #else:
 	#print ('front:', data.range)
 
+#side emergency brake
+def callback1(data):
+    if (data.range<0.25 and data.range>0):
+        pub.publish(brake_msg)
+        print ('side_brake')
+ 
+    #else:
+        #print ('back:', data.range)
+
 #back emergency brake
 def callback2(data):
-    if (data.range<0.3 and data.range>0):
+    if (data.range<0.4 and data.range>0):
         pub.publish(brake_msg)
         print ('back_brake')
  
@@ -48,6 +57,8 @@ def ultrasonic_listener():
 	print('node initialized')
 	rospy.Subscriber("ultrasonic_range_0", Range, callback0) #front   
 	rospy.Subscriber("ultrasonic_range_1", Range, callback0) #front
+	rospy.Subscriber("ultrasonic_range_3", Range, callback1) #side
+	rospy.Subscriber("ultrasonic_range_5", Range, callback1) #side
 	rospy.Subscriber("ultrasonic_range_6", Range, callback2) #back
 	rospy.Subscriber("ultrasonic_range_7", Range, callback2) #back
 
