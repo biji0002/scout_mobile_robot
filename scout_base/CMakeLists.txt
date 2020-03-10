@@ -76,7 +76,8 @@ target_link_libraries(ptz_cam_srv_client ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${
 add_executable(ptz_service_call_node tests/ptz_service_call_node.cpp)
 target_link_libraries(ptz_service_call_node ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
-
+add_executable(ptz_pose tests/ptz_pose.cpp)
+target_link_libraries(ptz_pose ${catkin_LIBRARIES} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
 
 #############
