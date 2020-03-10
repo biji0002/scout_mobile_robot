@@ -44,7 +44,7 @@ void ptz::messangeCallback(const scout_msgs::PTZ::ConstPtr& msg)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "ptz_service_call_node");
-	ROS_INFO("PTZ_service_node start!")
+    ROS_INFO("PTZ_service_node start!");
     ptz ptz_ctrl;
 
 	ros::spin();
