@@ -2,16 +2,16 @@ footprint: [[-0.53, -0.36], [-0.53, 0.36], [0.53, 0.36], [0.53, -0.36]]
 footprint_padding: 0.01
 
 robot_base_frame: base_link
-update_frequency: 4.0
-publish_frequency: 4.0
+update_frequency: 2.0
+publish_frequency: 2.0
 transform_tolerance: 0.5
 
 resolution: 0.05
 
 #obstacle_range: 4.0
-obstacle_range: 7.0
+obstacle_range: 5.5
 #raytrace_range: 6.0
-raytrace_range: 7.0
+raytrace_range: 6.0
 #layer definitions
 static:
     map_topic: /map
@@ -22,11 +22,9 @@ obstacles_laser:
     laser_scan: {data_type: LaserScan, clearing: true, marking: true, topic: scan, inf_is_valid: true}
     laser_pointcloud: {data_type: PointCloud2, topic: points2, marking: true, clearing: true}
 
-#inflation:
-#    inflation_radius: 0.25
 
 inflation:
-    inflation_radius: 0.3
+    inflation_radius: 0.32
 
 #ultrasonic_sensor:
 #    topic: ["/ultrasonic_range_0"]

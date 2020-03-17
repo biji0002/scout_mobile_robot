@@ -38,7 +38,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCL
     <param name="base_local_planner" value="$(arg base_local_planner)"/>  
     <rosparam file="$(find scout_navigation)/config/planner.yaml" command="load"/>
     
-    <!--remap from="cmd_vel" to="movebase_vel"-->
+    <remap from="cmd_vel" to="movebase_vel"/>
 
     <!-- observation sources located in costmap_common.yaml -->
     <rosparam file="$(find scout_navigation)/config/costmap_common.yaml" command="load" ns="global_costmap" />
