@@ -24,7 +24,7 @@
     <rosparam>
       filter_field_name: z
       filter_limit_min: -1.0
-      filter_limit_max: 1.0
+      filter_limit_max: -0.1
       filter_limit_negative: False
     </rosparam>
   </node>
