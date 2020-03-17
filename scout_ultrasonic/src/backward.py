@@ -15,7 +15,7 @@ def callback1(data):
 		right_obstacle = 1
 		backward_right = 1
 
-	elif (data.range>0.5 or data.range<0):
+	elif (data.range>0.45 or data.range<0):
 		right_obstacle = 0
 
 
@@ -25,7 +25,7 @@ def callback2(data):
 		left_obstacle = 1
 		backward_left = 1
 
-    	elif (data.range>0.5 or data.range<0):
+    	elif (data.range>0.45 or data.range<0):
 		left_obstacle = 0
 
 

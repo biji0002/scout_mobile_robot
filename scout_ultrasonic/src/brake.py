@@ -57,8 +57,8 @@ def ultrasonic_listener():
 	print('node initialized')
 	rospy.Subscriber("ultrasonic_range_0", Range, callback0) #front   
 	rospy.Subscriber("ultrasonic_range_1", Range, callback0) #front
-	rospy.Subscriber("ultrasonic_range_3", Range, callback1) #side
-	rospy.Subscriber("ultrasonic_range_5", Range, callback1) #side
+	#rospy.Subscriber("ultrasonic_range_3", Range, callback1) #side
+	#rospy.Subscriber("ultrasonic_range_5", Range, callback1) #side
 	rospy.Subscriber("ultrasonic_range_6", Range, callback2) #back
 	rospy.Subscriber("ultrasonic_range_7", Range, callback2) #back
 
