@@ -6,7 +6,7 @@ from geometry_msgs.msg import Twist
 
 #front emergency brake
 def callback0(data):
-    if (data.range<0.6 and data.range>0):
+    if (data.range<0.4 and data.range>0):
         pub.publish(brake_msg)
         print ('front_brake')
  

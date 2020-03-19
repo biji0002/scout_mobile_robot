@@ -11,21 +11,21 @@ backward_left = 0
 #going backward
 def callback1(data):
 	global right_obstacle, backward_right
-	if (data.range<0.4 and data.range>0):
+	if (data.range<0.5 and data.range>0):
 		right_obstacle = 1
 		backward_right = 1
 
-	elif (data.range>0.45 or data.range<0):
+	elif (data.range>0.55 or data.range<0):
 		right_obstacle = 0
 
 
 def callback2(data):
 	global left_obstacle, backward_left
-    	if (data.range<0.4 and data.range>0):
+    	if (data.range<0.5 and data.range>0):
 		left_obstacle = 1
 		backward_left = 1
 
-    	elif (data.range>0.45 or data.range<0):
+    	elif (data.range>0.55 or data.range<0):
 		left_obstacle = 0
 
 
